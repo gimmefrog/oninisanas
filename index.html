@@ -206,8 +206,17 @@ header{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:24px;
+  gap:48px;
 }
+.footer-links a{
+  font-size:11px;
+  color:var(--ink-soft);
+  letter-spacing:0.04em;
+}
+.footer-links a:hover{
+  color:var(--ink);
+}
+  
   .footer-brand{max-width:280px;}
   .footer-brand .serif{font-size:22px; margin-bottom:10px; display:block;}
   .footer-brand p{font-size:13px; color:var(--ink-soft); line-height:1.7;}
@@ -215,11 +224,11 @@ header{
   .footer-col h4{font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:14px;}
   .footer-col a{display:block; font-size:13px; color:var(--ink-soft); margin-bottom:9px;}
   .footer-col a:hover{color:var(--ink);}
-  .footer-bottom{
-    display:flex; justify-content:space-between; align-items:center;
-    font-size:11px; color:var(--ink-soft); letter-spacing:0.04em;
-    border-top:1px solid var(--line); padding-top:20px; flex-wrap:wrap; gap:10px;
-  }
+ .footer-bottom{
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:11px; color:var(--ink-soft); letter-spacing:0.04em;
+  border-top:1px solid var(--line); padding:20px 24px 0; flex-wrap:wrap; gap:10px;
+}
 
   /* ---------- Mobile drawer ---------- */
   .drawer-overlay{
@@ -368,7 +377,7 @@ header{
 </section>
 
 <footer id="info">
-  <div class="footer-bottom">
+  <div class="footer-top">
     <div class="footer-links">
       <a href="https://shopee.tw/buorigin#product_list" target="_blank" rel="noopener">Market</a>
       <a href="https://www.instagram.com/oninisanas/" target="_blank" rel="noopener">Instagram</a>
