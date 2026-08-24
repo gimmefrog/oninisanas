@@ -143,13 +143,18 @@ header{
 
   /* ---------- Category grid ---------- */
   .section{padding:88px 32px;}
-  .section-head{
-    display:flex; justify-content:space-between; align-items:flex-end;
-    margin-bottom:44px; gap:48px; flex-wrap:wrap;
-  }
+ .section-head{
+  display:flex; 
+  flex-direction:column;      /* 改成上下排列 */
+  align-items:center;          /* 水平置中 */
+  text-align:center;           /* 文字本身也置中對齊 */
+  margin-bottom:44px; 
+  gap:12px;
+}
+  
   .section-head h2{
     font-family:"Inter","Noto Sans TC",sans-serif;
-    font-weight:500; font-size:clamp(26px,4vw,40px);
+    font-weight:500; font-size:14px;
   }
   .section-head p{font-size:14px; color:var(--ink-soft); max-width:360px; line-height:1.7;}
 
