@@ -15,11 +15,11 @@
 <style>
   :root{
     --paper:#000000;
-    --paper-deep:#1f1f1f;
+    --paper-deep:#171717;
     --ink:#ffffff;
     --ink-soft:#ffffff;
     --line:#1f1f1f;
-    --accent:#1f1f1f;
+    --accent:#cccccc;
     --accent-soft:#cccccc;
     --olive:#ffffff;
     --radius:2px;
@@ -87,21 +87,11 @@ header{
     overflow:hidden;
   }
   .hero-bg{
-    position:absolute; inset:0;
-    background:
-      radial-gradient(ellipse at 30% 20%, rgba(120,130,150,0.18), transparent 55%),
-      linear-gradient(180deg, #1a1a18 0%, #131311 45%, #0a0a09 100%);
-  }
-  .hero-bg::after{
-    content:"";
-    position:absolute; inset:0;
-    background-image:
-      repeating-linear-gradient(115deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 22px);
-  }
-  /* 若改用真實圖片,把上面 background 換成:
-     background-image:url('你的圖片路徑.jpg');
-     background-size:cover; background-position:center;
-     並可疊加暗化遮罩: linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.55)), url(...);
+  position:absolute; inset:0;
+  background-image:url('somethree-ver05-sky-3');
+  background-size:cover;
+  background-position:center;
+}
   */
   .hero-eyebrow{
     position:relative; z-index:1;
