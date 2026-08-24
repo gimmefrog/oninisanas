@@ -38,27 +38,28 @@
   ::selection{background:var(--accent); color:var(--paper);}
 
   /* ---------- Header ---------- */
-  header{
-    position:sticky; top:0; z-index:50;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 32px;
-    background:#000000;
-    border-bottom:1px solid var(--line);
-  }
+header{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center;   /* 拿掉 justify-content:space-between */
+  padding:18px 32px;
+  background:#000000;
+  border-bottom:1px solid var(--line);
+}
   .brand{
     font-family:"Newsreader","Noto Serif TC",serif;
     font-size:20px; font-weight:600; letter-spacing:0.02em;
   }
   .brand small{display:block; font-size:10px; font-weight:400; letter-spacing:0.18em; color:var(--ink-soft); text-transform:uppercase; margin-top:2px;}
-  .brand img{height:26px; display:block;}   /* 若標題改用圖片Logo,套用這個高度即可 */
+  .brand img{height:18px; width:auto; display:block;}
 
   .hero-title-img{max-width:min(720px, 78vw); height:auto; display:block; position:relative; z-index:1;}
   /* 主標題若改用圖片:直接把 .hero-title 換成 <img class="hero-title-img" src="..." alt="...">
      圖片建議用白色/淺色線條或文字,搭配透明背景(PNG)在深色底上效果最好 */
 
   nav.groups{
-    display:flex; gap:28px; align-items:center;
-  }
+  display:flex; gap:28px; align-items:center;
+  margin-left:28px;   /* 跟選單項目之間的 gap 值一樣,靠左貼齊 */
+}
   .top-link{
     font-size:12px; letter-spacing:0.03em;
     color:var(--ink);
@@ -66,7 +67,10 @@
   }
   .top-link:hover{color:var(--accent);}
 
-  .header-actions{display:flex; align-items:center; gap:18px; font-size:13px;}
+.header-actions{
+  display:flex; align-items:center; gap:18px; font-size:13px;
+  margin-left:auto;   /* 推到最右邊,跟左邊三塊分開 */
+}
   .icon-btn{
     width:30px; height:30px; display:flex; align-items:center; justify-content:center;
     cursor:pointer; border-radius:50%; transition:background .2s;
@@ -242,7 +246,7 @@
 
 <header>
   <a href="/" class="brand">
-    <img src="logo.png"sizes="50x50" alt="on in is an as">
+ <img src="logo.png" alt="on in is an as" style="height:18px; width:auto; display:block;">
   </a>
 
   <nav class="groups">
