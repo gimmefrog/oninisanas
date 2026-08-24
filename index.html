@@ -51,10 +51,14 @@ header{
   }
   .brand small{display:block; font-size:10px; font-weight:400; letter-spacing:0.18em; color:var(--ink-soft); text-transform:uppercase; margin-top:2px;}
   .brand img{height:8px; width:auto; display:block;}
-
-  .hero-title-img{max-width:min(720px, 78vw); height:auto; display:block; position:relative; z-index:1;}
-  /* 主標題若改用圖片:直接把 .hero-title 換成 <img class="hero-title-img" src="..." alt="...">
-     圖片建議用白色/淺色線條或文字,搭配透明背景(PNG)在深色底上效果最好 */
+  
+ hero{
+  position:relative;
+  height:100vh; min-height:640px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:48px 32px 56px;
+  overflow:hidden;
+}
 
   nav.groups{
   display:flex; gap:28px; align-items:center;
@@ -90,14 +94,15 @@ header{
   .hero-bg{
   position:absolute; inset:0;
   background-image:url(somethree-ver05-sky-3.png);
-  background-size:cover;
+  background-size:140%;
   background-position:center;
-  animation:float-bg 30s ease-in-out infinite alternate;
+  animation:float-bg 18s ease-in-out infinite alternate;
 }
 
 @keyframes float-bg{
-  0%   { background-position:50% 45%; }
-  100% { background-position:52% 52%; }
+  0%   { background-position:35% 30%; background-size:145%; }
+  50%  { background-position:55% 60%; background-size:135%; }
+  100% { background-position:65% 45%; background-size:150%; }
 }
 
   
