@@ -86,12 +86,21 @@ header{
     padding:48px 32px 56px;
     overflow:hidden;
   }
+  
   .hero-bg{
   position:absolute; inset:0;
-  background-image:url(somethree-ver05-sky-3);
+  background-image:url(somethree-ver05-sky-3.png);
   background-size:cover;
   background-position:center;
+  animation:float-bg 30s ease-in-out infinite alternate;
 }
+
+@keyframes float-bg{
+  0%   { background-position:50% 45%; }
+  100% { background-position:52% 52%; }
+}
+
+  
   */
   .hero-eyebrow{
     position:relative; z-index:1;
