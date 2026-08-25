@@ -287,13 +287,13 @@
   .drawer-overlay.open{opacity:1; visibility:visible;}
   .drawer-overlay.overlay--light{ background:rgba(0,0,0,0); }
   .drawer{
-    position:fixed; top:80; left:0; width:100%;
+    position:fixed; top:0; left:0; width:100%;
     height:auto; max-height:85vh;
     background:transparent; color:#ffffff;
     z-index:61;
     transform:translateY(-100%);
     transition:transform .35s ease, background .3s ease, color .3s ease;
-    padding:var(--header-pad-y) var(--header-pad-x);
+    padding:var(--header-pad-y) 40px var(--header-pad-x);
     overflow-y:auto;
     display:flex; flex-direction:column;
   }
