@@ -208,19 +208,12 @@ header{
   width:100%;
 }
 .footer-links{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:48px;
+  display:flex; justify-content:center; align-items:center; gap:24px;
 }
 .footer-links a{
-  font-size:11px;
-  color:var(--ink-soft);
-  letter-spacing:0.04em;
+  font-size:11px; color:var(--ink-soft); letter-spacing:0.04em;
 }
-.footer-links a:hover{
-  color:var(--ink);
-}
+.footer-links a:hover{ color:var(--ink); }
   
   .footer-brand{max-width:280px;}
   .footer-brand .serif{font-size:22px; margin-bottom:10px; display:block;}
@@ -230,9 +223,9 @@ header{
   .footer-col a{display:block; font-size:13px; color:var(--ink-soft); margin-bottom:9px;}
   .footer-col a:hover{color:var(--ink);}
  .footer-bottom{
-  display:flex; justify-content:space-between; align-items:center;
+  display:flex; flex-direction:column; align-items:center;
   font-size:11px; color:var(--ink-soft); letter-spacing:0.04em;
-  border-top:1px solid var(--line); padding:50px 99px 68px; flex-wrap:wrap; gap:10px;
+  padding:20px 24px; gap:12px;
 }
 
   /* ---------- Mobile drawer ---------- */
@@ -381,17 +374,11 @@ header{
   </div>
 </section>
 
-<footer id="info">
-  <div class="footer-top">
-    <div class="footer-links">
-      <a href="https://shopee.tw/buorigin#product_list" target="_blank" rel="noopener">Market</a>
-      <a href="https://www.instagram.com/oninisanas/" target="_blank" rel="noopener">Instagram</a>
-    </div>
-  </div>
-</footer>
-      
-  <div class="footer-bottom">
-    <span>© 2026 on in is an as</span>
+      <div class="footer-bottom">
+  <div class="footer-links">
+    <a href="https://shopee.tw/buorigin#product_list" target="_blank" rel="noopener">Shop</a>
+    <a href="https://www.instagram.com/oninisanas/" target="_blank" rel="noopener">Instagram</a>
+    <span>© 2026 on in is an as. All Rights Reserved.</span>
     <span>Born in Taiwan</span>
   </div>
 </footer>
