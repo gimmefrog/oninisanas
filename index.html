@@ -24,6 +24,11 @@
     --olive:#000000;
     --radius:2px;
     --header-h:64px;
+    --header-pad-y:24px;
+    --header-pad-x:68px;
+    --menu-icon-font:24px;
+    --menu-icon-w:30px;
+    --menu-icon-h:30px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth; scroll-snap-type:y mandatory;}
@@ -38,20 +43,18 @@
   .serif{font-family:"Inter","Noto Sans TC",sans-serif;}
   ::selection{background:var(--accent); color:var(--paper);}
 
-  /* ---------- Header ---------- */
   header{
     position:fixed; top:0; left:0; width:100%; z-index:50;
     display:flex; align-items:center;
-    padding:24px 68px;
+    padding:var(--header-pad-y) var(--header-pad-x);
     background:transparent;
-    border-bottom:1px solid transparent;
     color:#ffffff;
-    transition:background .35s ease, border-color .35s ease;
+    transition:color .35s ease;
   }
-  header.header--light{
-    background:#ffffff;
-    border-bottom:none;   /* 移除切換後的底線 */
-  }
+  header.header--light .top-link{ color:#000000; }
+  header.header--light .icon-btn{ color:#000000; }
+  .top-link:hover{ opacity:0.6; }
+
   .brand{
     font-family:"Inter","Noto Sans TC",sans-serif;
     font-size:20px; font-weight:600; letter-spacing:0.02em;
@@ -70,22 +73,20 @@
     color:#ffffff;
     transition:color .35s ease;
   }
-  header.header--light .top-link{ color:#000000; }
-  .top-link:hover{ opacity:0.6; }
 
   .header-actions{
     display:flex; align-items:center; gap:18px; font-size:13px;
     margin-left:auto;
   }
   .icon-btn{
-  width:30px; height:30px; display:flex; align-items:center; justify-content:center;
-  cursor:pointer; border-radius:50%; transition:background .2s; color:inherit;
-  font-size:24px;   /* 新增這行,控制圖示大小 */
-}
+    width:var(--menu-icon-w); height:var(--menu-icon-h);
+    font-size:var(--menu-icon-font);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; border-radius:50%; transition:background .2s, color .3s; color:inherit;
+  }
   .icon-btn:hover{background:rgba(128,128,128,0.15);}
   .menu-toggle{display:none;}
 
-  /* ---------- 滿版區塊共用設定 ---------- */
   .full-section{
     min-height:100vh;
     scroll-snap-align:start;
@@ -94,24 +95,37 @@
     flex-direction:column;
     justify-content:center;
     position:relative;
+    overflow:hidden;
   }
   .full-section:not(.hero){
     padding-top:var(--header-h);
   }
+  .section-bg{
+    position:absolute; inset:0;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    z-index:0;
+  }
+  .full-section > *:not(.section-bg){
+    position:relative; z-index:1;
+  }
+  #character .section-bg{ background-image:none; }
+  #goods .section-bg{ background-image:none; }
+  #about .section-bg{ background-image:none; }
 
-  /* ---------- Hero ---------- */
   .hero{
     padding:48px 32px 56px;
-    overflow:hidden;
     justify-content:flex-end;
   }
   .hero-bg{
     position:absolute; inset:0;
     background-image:url(somethree-ver05-sky-3.png);
-    background-size:cover;         /* 改用 cover,確保任何比例螢幕都滿版覆蓋,修正手機版留白/重複問題 */
+    background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
     animation:float-bg 25s ease-in-out infinite alternate;
+    z-index:0;
   }
   @keyframes float-bg{
     0%   { background-position:40% 45%; }
@@ -119,23 +133,13 @@
     100% { background-position:62% 50%; }
   }
 
-  /* ---------- Intro strip ---------- */
-  .strip{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:14px 32px; border-bottom:1px solid var(--line); border-top:1px solid var(--line);
-    font-size:12px; letter-spacing:0.08em; color:var(--ink-soft); text-transform:uppercase;
-  }
-  .strip span{display:flex; align-items:center; gap:8px;}
-  .dot{width:5px; height:5px; border-radius:50%; background:var(--olive);}
-
-  /* ---------- Section 標題 ---------- */
   .section{padding:88px 32px;}
   .section-head{
     display:flex;
     flex-direction:column;
     align-items:center;
     text-align:center;
-    margin-bottom:44px;
+    margin-bottom:36px;
     gap:12px;
   }
   .section-head h2{
@@ -144,11 +148,19 @@
   }
   .section-head p{font-size:14px; color:var(--ink-soft); max-width:360px; line-height:1.7; margin:0 auto;}
 
-  .about-block{
-    padding:64px 32px;
-    text-align:center;
-    border:none;
+  .section-head-row{
+    display:flex; align-items:center; justify-content:space-between;
+    width:100%; max-width:1100px; margin:0 auto 36px;
   }
+  .section-head-row h2{
+    font-family:"Inter","Noto Sans TC",sans-serif;
+    font-weight:700; font-size:18px;
+  }
+  .shop-link{
+    font-size:13px; font-weight:700; letter-spacing:0.05em; color:inherit;
+  }
+  .shop-link:hover{ opacity:0.55; }
+
   .about-block p{
     font-family:"Inter","Noto Sans TC",sans-serif;
     font-size:16px;
@@ -158,24 +170,27 @@
     line-height:1.8;
   }
 
-  /* ---------- 商品/角色 圖片格 ---------- */
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);   /* 電腦一排4個 */
-    gap:28px 20px;
-    background:transparent;
-    border:none;
+  .carousel{
+    width:100%; max-width:1100px; margin:0 auto;
   }
-  .tile{
-    background:transparent;
-    padding:0;
+  .carousel-viewport{
+    overflow:hidden; width:100%;
+  }
+  .carousel-track{
+    display:flex;
+    transition:transform .4s ease;
+  }
+  .carousel-track .tile{
+    flex:0 0 calc(100% / 3);
+    padding:0 12px;
+    box-sizing:border-box;
     display:flex; flex-direction:column; gap:10px;
     cursor:default;
   }
   .tile-image{
     position:relative;
     width:100%;
-    aspect-ratio:4 / 6;      /* 高6:寬4 */
+    aspect-ratio:4 / 5;
     overflow:hidden;
     background:var(--paper-deep);
   }
@@ -183,9 +198,9 @@
     position:absolute; inset:0;
     width:100%; height:100%;
     object-fit:cover;
-    transition:opacity .35s ease;
   }
   .tile-image .img-b{ opacity:0; }
+  .tile:hover .tile-image .img-a{ opacity:0; }
   .tile:hover .tile-image .img-b{ opacity:1; }
 
   .tile h3{
@@ -194,13 +209,23 @@
   }
   .tile p{font-size:12px; color:var(--ink-soft); line-height:1.5;}
 
-  .shop-link-wrap{ text-align:center; margin-top:48px; }
-  .shop-link{
-    font-size:13px; font-weight:700; letter-spacing:0.05em; color:#000000;
+  .carousel-nav{
+    display:flex; justify-content:center; align-items:center; gap:28px;
+    margin-top:24px;
   }
-  .shop-link:hover{ opacity:0.55; }
+  .car-arrow{
+    background:none; border:none; cursor:pointer;
+    font-size:18px; color:inherit; line-height:1;
+    width:30px; height:30px;
+    display:flex; align-items:center; justify-content:center;
+    padding:0;
+  }
+  .car-arrow:hover{ opacity:0.5; }
 
-  /* ---------- Footer ---------- */
+  @media (max-width:860px){
+    .carousel-track .tile{ flex:0 0 calc(100% / 2); }
+  }
+
   footer{
     border-top:1px solid var(--line);
     padding:56px 32px 32px;
@@ -221,7 +246,6 @@
     padding:0 24px; gap:12px;
   }
 
-  /* ---------- Mobile drawer:上方掀開,logo+選單皆靠左 ---------- */
   .drawer-overlay{
     position:fixed; inset:0; background:rgba(0,0,0,0.35);
     opacity:0; visibility:hidden; transition:opacity .3s; z-index:60;
@@ -229,37 +253,44 @@
   .drawer-overlay.open{opacity:1; visibility:visible;}
   .drawer{
     position:fixed; top:0; left:0; width:100%;
-    height:33vh; min-height:220px; max-height:320px;
-    background:var(--paper); z-index:61;
-    transform:translateY(-100%); transition:transform .35s ease;
-    padding:20px 24px; overflow-y:auto;
+    height:auto; max-height:85vh;
+    background:transparent; color:#ffffff;
+    z-index:61;
+    transform:translateY(-100%);
+    transition:transform .35s ease, background .3s ease, color .3s ease;
+    padding:var(--header-pad-y) var(--header-pad-x);
+    overflow-y:auto;
     display:flex; flex-direction:column;
   }
   .drawer.open{transform:translateY(0);}
+  .drawer.drawer--light{
+    background:#ffffff; color:#000000;
+  }
   .drawer-header{
     display:flex; align-items:center; justify-content:space-between;
-    width:100%; margin-bottom:24px;
+    width:100%; margin-bottom:32px;
   }
-  .drawer-logo{ height:8px; width:auto; display:block; }
-  .drawer-close{font-size:20px; cursor:pointer;}
+  .drawer-logo{ height:8px; width:auto; display:block; filter:brightness(0) invert(1); transition:filter .3s ease; }
+  .drawer.drawer--light .drawer-logo{ filter:none; }
   .drawer-group{
-    display:flex; flex-direction:column; align-items:flex-start; gap:16px;
+    display:flex; flex-direction:column; align-items:flex-start; gap:18px;
   }
   .drawer-group a{
-    font-size:64px; font-weight:700; color:var(--ink);
+    font-size:22px; font-weight:700; color:inherit;
     text-align:left; padding:0; border:none;
   }
 
   @media (max-width:860px){
     nav.groups{display:none;}
     .menu-toggle{display:flex;}
-    .grid{grid-template-columns:repeat(2, 1fr); gap:20px 14px;}  /* 手機一排2個 */
   }
   @media (max-width:520px){
-    header{padding:14px 18px;}
+    :root{
+      --header-pad-y:14px;
+      --header-pad-x:18px;
+    }
     .hero{padding:32px 18px 40px;}
     .section{padding:56px 18px;}
-    .grid{gap:18px 12px;}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -289,7 +320,7 @@
 <div class="drawer" id="drawer">
   <div class="drawer-header">
     <img src="logo black.png" alt="on in is an as" class="drawer-logo">
-    <span class="drawer-close" id="closeDrawer">×</span>
+    <span class="icon-btn drawer-close" id="closeDrawer">×</span>
   </div>
   <div class="drawer-group">
     <a href="#character">character</a>
@@ -298,117 +329,136 @@
   </div>
 </div>
 
-<section class="hero full-section" id="top">
+<section class="hero full-section" id="top" data-header="dark">
   <div class="hero-bg"></div>
 </section>
 
-<section class="section full-section" id="character">
+<section class="section full-section" id="character" data-header="light">
+  <div class="section-bg"></div>
   <div class="section-head">
     <h2>character</h2>
   </div>
-  <div class="grid">
-    <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="Somethree">
-        <img class="img-b" src="back.png" alt="Somethree">
+
+  <div class="carousel" data-carousel>
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="Somethree">
+            <img class="img-b" src="back.png" alt="Somethree">
+          </div>
+          <h3>Somethree</h3>
+          <p>I am a bear.</p>
+        </div>
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="Some Who">
+            <img class="img-b" src="back.png" alt="Some Who">
+          </div>
+          <h3>Some Who</h3>
+          <p>I am ?</p>
+        </div>
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="Some Who">
+            <img class="img-b" src="back.png" alt="Some Who">
+          </div>
+          <h3>Some Who</h3>
+          <p>I am ?</p>
+        </div>
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="Some Who">
+            <img class="img-b" src="back.png" alt="Some Who">
+          </div>
+          <h3>Some Who</h3>
+          <p>I am ?</p>
+        </div>
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="Some Who">
+            <img class="img-b" src="back.png" alt="Some Who">
+          </div>
+          <h3>Some Who</h3>
+          <p>I am ?</p>
+        </div>
       </div>
-      <h3>Somethree</h3>
-      <p>I am a bear.</p>
     </div>
-    <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="Some Who">
-        <img class="img-b" src="back.png" alt="Some Who">
-      </div>
-      <h3>Some Who</h3>
-      <p>I am ?</p>
-    </div>
-    <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="Some Who">
-        <img class="img-b" src="back.png" alt="Some Who">
-      </div>
-      <h3>Some Who</h3>
-      <p>I am ?</p>
-    </div>
-    <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="Some Who">
-        <img class="img-b" src="back.png" alt="Some Who">
-      </div>
-      <h3>Some Who</h3>
-      <p>I am ?</p>
-    </div>
-    <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="Some Who">
-        <img class="img-b" src="back.png" alt="Some Who">
-      </div>
-      <h3>Some Who</h3>
-      <p>I am ?</p>
+    <div class="carousel-nav">
+      <button type="button" class="car-arrow car-prev" aria-label="上一個">‹</button>
+      <button type="button" class="car-arrow car-next" aria-label="下一個">›</button>
     </div>
   </div>
 </section>
 
-<section class="section full-section" id="goods">
-  <div class="section-head">
+<section class="section full-section" id="goods" data-header="light">
+  <div class="section-bg"></div>
+  <div class="section-head-row">
     <h2>goods</h2>
-  </div>
-  <div class="grid">
-    <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="Somethree">
-        <img class="img-b" src="back.png" alt="Somethree">
-      </div>
-      <h3>Somethree</h3>
-      <p>NT$680</p>
-    </div>
-    <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="tak-kang huann-hí Postcard">
-        <img class="img-b" src="back.png" alt="tak-kang huann-hí Postcard">
-      </div>
-      <h3>tak-kang huann-hí Postcard</h3>
-      <p>$60 TWD</p>
-    </div>
-    <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="luān-tshau-tshau Postcard">
-        <img class="img-b" src="back.png" alt="luān-tshau-tshau Postcard">
-      </div>
-      <h3>luān-tshau-tshau Postcard</h3>
-      <p>$60 TWD</p>
-    </div>
-     <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="luān-tshau-tshau Postcard">
-        <img class="img-b" src="back.png" alt="luān-tshau-tshau Postcard">
-      </div>
-      <h3>luān-tshau-tshau Postcard</h3>
-      <p>$60 TWD</p>
-    </div>
-     <div class="tile">
-      <div class="tile-image">
-        <img class="img-a" src="front.png" alt="luān-tshau-tshau Postcard">
-        <img class="img-b" src="back.png" alt="luān-tshau-tshau Postcard">
-      </div>
-      <h3>luān-tshau-tshau Postcard</h3>
-      <p>$60 TWD</p>
-    </div>
-  </div>
-  <div class="shop-link-wrap">
     <a href="https://shopee.tw/buorigin#product_list" target="_blank" rel="noopener" class="shop-link">SHOP →</a>
   </div>
+
+  <div class="carousel" data-carousel>
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="Somethree">
+            <img class="img-b" src="back.png" alt="Somethree">
+          </div>
+          <h3>Somethree</h3>
+          <p>NT$680</p>
+        </div>
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="tak-kang huann-hí Postcard">
+            <img class="img-b" src="back.png" alt="tak-kang huann-hí Postcard">
+          </div>
+          <h3>tak-kang huann-hí Postcard</h3>
+          <p>$60 TWD</p>
+        </div>
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="luān-tshau-tshau Postcard">
+            <img class="img-b" src="back.png" alt="luān-tshau-tshau Postcard">
+          </div>
+          <h3>luān-tshau-tshau Postcard</h3>
+          <p>$60 TWD</p>
+        </div>
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="luān-tshau-tshau Postcard">
+            <img class="img-b" src="back.png" alt="luān-tshau-tshau Postcard">
+          </div>
+          <h3>luān-tshau-tshau Postcard</h3>
+          <p>$60 TWD</p>
+        </div>
+        <div class="tile">
+          <div class="tile-image">
+            <img class="img-a" src="front.png" alt="luān-tshau-tshau Postcard">
+            <img class="img-b" src="back.png" alt="luān-tshau-tshau Postcard">
+          </div>
+          <h3>luān-tshau-tshau Postcard</h3>
+          <p>$60 TWD</p>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-nav">
+      <button type="button" class="car-arrow car-prev" aria-label="上一個">‹</button>
+      <button type="button" class="car-arrow car-next" aria-label="下一個">›</button>
+    </div>
+  </div>
 </section>
 
-<section class="about-block full-section" id="about">
+<section class="about-block full-section" id="about" data-header="light">
+  <div class="section-bg"></div>
   <div class="section-head">
     <h2>about</h2>
     <p>A space built on boring → born.</p>
   </div>
 </section>
 
-<footer id="siteFooter">
+<footer id="siteFooter" data-header="light">
   <div class="footer-links">
     <a href="https://shopee.tw/buorigin#product_list" target="_blank" rel="noopener">Shop</a>
     <a href="https://www.instagram.com/oninisanas/" target="_blank" rel="noopener">Instagram</a>
@@ -420,37 +470,45 @@
 </footer>
 
 <script>
+  const header = document.getElementById('siteHeader');
   const openBtn = document.getElementById('openDrawer');
   const closeBtn = document.getElementById('closeDrawer');
   const drawer = document.getElementById('drawer');
   const overlay = document.getElementById('drawerOverlay');
-  function openDrawer(){ drawer.classList.add('open'); overlay.classList.add('open'); }
-  function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('open'); }
+
+  function openDrawer(){
+    if (header.classList.contains('header--light')) {
+      drawer.classList.add('drawer--light');
+    } else {
+      drawer.classList.remove('drawer--light');
+    }
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+  }
   openBtn.addEventListener('click', openDrawer);
   closeBtn.addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
   document.querySelectorAll('.drawer-group a').forEach(a => a.addEventListener('click', closeDrawer));
 
-  /* ---------- 頁首依區塊自動變色 ---------- */
-  const header = document.getElementById('siteHeader');
-  const heroEl = document.getElementById('top');
-  const lightSections = document.querySelectorAll('#character, #goods, #about, #siteFooter');
+  document.querySelectorAll('[data-header]').forEach(sec => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (sec.dataset.header === 'dark') {
+            header.classList.remove('header--light');
+          } else {
+            header.classList.add('header--light');
+          }
+        }
+      });
+    }, { threshold: 0.35 });
+    obs.observe(sec);
+  });
 
-  const lightObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) header.classList.add('header--light');
-    });
-  }, { threshold: 0.35 });
-  lightSections.forEach(sec => lightObserver.observe(sec));
-
-  const heroObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) header.classList.remove('header--light');
-    });
-  }, { threshold: 0.35 });
-  heroObserver.observe(heroEl);
-
-  /* ---------- 一次滑動 = 切換一個完整面板(電腦+手機共用) ---------- */
   const panels = [
     document.getElementById('top'),
     document.getElementById('character'),
@@ -477,7 +535,6 @@
     setTimeout(() => { isAnimating = false; }, 850);
   }
 
-  // 桌面:滑鼠滾輪
   window.addEventListener('wheel', (e) => {
     if (isAnimating) { e.preventDefault(); return; }
     e.preventDefault();
@@ -485,20 +542,71 @@
     goToPanel(current + (e.deltaY > 0 ? 1 : -1));
   }, { passive:false });
 
-  // 手機:觸控滑動
-  let touchStartY = 0;
+  let pageTouchStartY = 0;
   document.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches[0].clientY;
+    pageTouchStartY = e.touches[0].clientY;
   }, { passive:true });
 
   document.addEventListener('touchend', (e) => {
     if (isAnimating) return;
     const touchEndY = e.changedTouches[0].clientY;
-    const diff = touchStartY - touchEndY;
-    if (Math.abs(diff) < 40) return;   // 太小的滑動不觸發
+    const diff = pageTouchStartY - touchEndY;
+    if (Math.abs(diff) < 40) return;
     const current = getCurrentPanelIndex();
     goToPanel(current + (diff > 0 ? 1 : -1));
   }, { passive:true });
+
+  function initCarousel(container){
+    const track = container.querySelector('.carousel-track');
+    const tiles = Array.from(track.children);
+    const total = tiles.length;
+    let index = 0;
+
+    function visibleCount(){
+      return window.innerWidth <= 860 ? 2 : 3;
+    }
+    function maxIndex(){
+      return Math.max(0, total - visibleCount());
+    }
+    function update(){
+      const itemWidth = 100 / visibleCount();
+      track.style.transform = `translateX(-${index * itemWidth}%)`;
+    }
+    function next(){
+      index = index >= maxIndex() ? 0 : index + 1;
+      update();
+    }
+    function prev(){
+      index = index <= 0 ? maxIndex() : index - 1;
+      update();
+    }
+
+    container.querySelector('.car-next').addEventListener('click', next);
+    container.querySelector('.car-prev').addEventListener('click', prev);
+    window.addEventListener('resize', () => {
+      index = Math.min(index, maxIndex());
+      update();
+    });
+
+    let sx = 0, sy = 0;
+    track.addEventListener('touchstart', (e) => {
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+    }, { passive:true });
+
+    track.addEventListener('touchend', (e) => {
+      const dx = sx - e.changedTouches[0].clientX;
+      const dy = sy - e.changedTouches[0].clientY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) {
+        e.stopPropagation();
+        if (dx > 0) next(); else prev();
+      }
+    }, { passive:true });
+
+    update();
+  }
+
+  document.querySelectorAll('[data-carousel]').forEach(initCarousel);
 </script>
 
 </body>
