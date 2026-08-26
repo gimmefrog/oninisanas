@@ -323,8 +323,6 @@
     top:var(--header-h);   /* 由JS依實際頁首高度動態覆寫,這裡是備用值 */
     height:auto; max-height:calc(85vh - var(--header-h));
     background-color:transparent; color:#ffffff;
-    --drawer-bg-image:url(drawer.png);   /* 想加選單背景圖,把none換成 url('圖片檔名.jpg') */
-    background-image:var(--drawer-bg-image);
     background-size:cover;
     background-position:center;
     z-index:45;   /* 低於頁首(70),頁首Logo與圖示永遠在最上層不被蓋住 */
@@ -336,7 +334,9 @@
   }
   .drawer.open{ opacity:1; visibility:visible; transform:translateY(0); }
   .drawer.drawer--light{
-    background-color:#ffffff; color:#000000;
+    background-color:transparent; color:#000000;
+    --drawer-bg-image:url(drawer.png);   /* 想加選單背景圖,把none換成 url('圖片檔名.jpg') */
+    background-image:var(--drawer-bg-image);
   }
   .drawer-group{
     margin-top:8px;
