@@ -31,7 +31,7 @@
     --menu-icon-h:30px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth; scroll-snap-type:y mandatory;}
+  html{scroll-behavior:smooth;}
   body{
     background:var(--paper);
     color:var(--ink);
@@ -82,14 +82,15 @@
     width:var(--menu-icon-w); height:var(--menu-icon-h);
     font-size:var(--menu-icon-font);
     display:flex; align-items:center; justify-content:center;
-    cursor:pointer; border-radius:50%; transition:background .2s, color .3s; color:inherit;
+    cursor:pointer; border-radius:50%; transition:color .3s; color:inherit;
+    -webkit-tap-highlight-color:transparent;
+    outline:none;
   }
+  .icon-btn:active, .icon-btn:focus{ background:transparent; }
   .menu-toggle{display:none;}
 
   .full-section{
     min-height:100vh;
-    scroll-snap-align:start;
-    scroll-snap-stop:always;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -281,19 +282,34 @@
     border-top:1px solid var(--line);
     padding:56px 32px 32px;
     display:flex; flex-direction:column; gap:24px;
-    scroll-snap-align:start;
+    /* ↓↓↓ 直接改這四個數值,可調整頁尾的色塊/背景圖與文字樣式 ↓↓↓ */
+    --footer-bg-color:transparent;
+    --footer-bg-image:none;
+    --footer-text-color:#000000;
+    --footer-text-size:11px;
+    --footer-text-weight:400;
+    background-color:var(--footer-bg-color);
+    background-image:var(--footer-bg-image);
+    background-size:cover;
+    background-position:center;
   }
   .footer-links{
     display:flex; justify-content:center; align-items:center; gap:20px;
     margin-bottom:24px;
   }
   .footer-links a{
-    font-size:11px; color:#000000; letter-spacing:0.04em;
+    font-size:var(--footer-text-size, 11px);
+    font-weight:var(--footer-text-weight, 400);
+    color:var(--footer-text-color, #000000);
+    letter-spacing:0.04em;
   }
   .footer-links a:hover{ opacity:0.6; }
   .footer-bottom{
     display:flex; flex-direction:column; align-items:center;
-    font-size:11px; color:#000000; letter-spacing:0.04em;
+    font-size:var(--footer-text-size, 11px);
+    font-weight:var(--footer-text-weight, 400);
+    color:var(--footer-text-color, #000000);
+    letter-spacing:0.04em;
     padding:0 24px; gap:12px;
   }
 
@@ -306,17 +322,21 @@
     position:fixed; left:0; width:100%;
     top:var(--header-h);   /* 由JS依實際頁首高度動態覆寫,這裡是備用值 */
     height:auto; max-height:calc(85vh - var(--header-h));
-    background:transparent; color:#ffffff;
+    background-color:transparent; color:#ffffff;
+    --drawer-bg-image:none;   /* 想加選單背景圖,把none換成 url('圖片檔名.jpg') */
+    background-image:var(--drawer-bg-image);
+    background-size:cover;
+    background-position:center;
     z-index:45;   /* 低於頁首(70),頁首Logo與圖示永遠在最上層不被蓋住 */
     opacity:0; visibility:hidden; transform:translateY(-12px);
-    transition:opacity .3s ease, transform .3s ease, background .3s ease, color .3s ease;
+    transition:opacity .3s ease, transform .3s ease, background-color .3s ease, color .3s ease;
     padding:2px var(--header-pad-x) 40px;
     overflow-y:auto;
     display:flex; flex-direction:column;
   }
   .drawer.open{ opacity:1; visibility:visible; transform:translateY(0); }
   .drawer.drawer--light{
-    background:#ffffff; color:#000000;
+    background-color:#ffffff; color:#000000;
   }
   .drawer-group{
     margin-top:8px;
@@ -324,7 +344,8 @@
   }
   .drawer-group a{
     font-size:52px; font-weight:700; color:inherit;
-    text-align:left; padding:-36; border:none;
+    text-align:left; padding:0; border:none;
+    -webkit-tap-highlight-color:transparent;
   }
 
   @media (max-width:860px){
@@ -500,6 +521,10 @@
 </footer>
 
 <script>
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
   const header = document.getElementById('siteHeader');
   const menuToggle = document.getElementById('menuToggle');
   const drawer = document.getElementById('drawer');
@@ -572,13 +597,14 @@
   }
 
   function goToPanel(index){
+    if (drawerOpen) closeDrawer();
     index = Math.max(0, Math.min(panels.length - 1, index));
     isAnimating = true;
     panels[index].scrollIntoView({ behavior:'smooth' });
     setTimeout(() => { isAnimating = false; }, 850);
   }
 
-  /* 手機選單連結:直接指定跳轉目標面板,不依賴瀏覽器原生錨點跳轉(避免與滿版捲動衝突而跳不準) */
+  /* 手機選單連結:直接指定跳轉目標面板,不依賴瀏覽器原生錨點跳轉 */
   document.querySelectorAll('.drawer-group a').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
@@ -591,14 +617,32 @@
     });
   });
 
-  /* 點擊Logo:確實回到首圖(index 0),不會停留在原本捲動位置 */
+  /* 桌面頂部選單連結:同樣改用JS導航,不讓網址列出現 #character 這類錨點 */
+  document.querySelectorAll('.top-link').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = a.getAttribute('href').slice(1);
+      const idx = panels.findIndex(p => p && p.id === targetId);
+      if (idx !== -1) goToPanel(idx);
+    });
+  });
+
+  /* 點擊Logo:確實回到首圖(index 0),並清除網址上殘留的 # 錨點 */
   if (logoLink) {
     logoLink.addEventListener('click', (e) => {
       e.preventDefault();
-      closeDrawer();
       goToPanel(0);
+      history.replaceState(null, '', window.location.pathname + window.location.search);
     });
   }
+
+  /* 頁面載入時:清除網址殘留的錨點,並確保一定從首圖(最上方)開始 */
+  window.addEventListener('load', () => {
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+    window.scrollTo(0, 0);
+  });
 
   window.addEventListener('wheel', (e) => {
     if (isAnimating) { e.preventDefault(); return; }
