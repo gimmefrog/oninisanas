@@ -44,7 +44,7 @@
   ::selection{background:var(--accent); color:var(--paper);}
 
   header{
-    position:fixed; top:0; left:0; width:100%; z-index:50;
+    position:fixed; top:0; left:0; width:100%; z-index:70;
     display:flex; align-items:center;
     padding:var(--header-pad-y) var(--header-pad-x);
     background:transparent;
@@ -118,20 +118,26 @@
   #character{
     --panel-title-color:var(--ink);
     --panel-title-size:18px;
+    --panel-title-weight:700;
     --panel-text-color:#000000;
     --panel-text-size:12px;
+    --panel-text-weight:400;
   }
   #goods{
     --panel-title-color:var(--ink);
     --panel-title-size:18px;
+    --panel-title-weight:700;
     --panel-text-color:#000000;
     --panel-text-size:12px;
+    --panel-text-weight:400;
   }
   #about{
     --panel-title-color:#000000;
     --panel-title-size:18px;
+    --panel-title-weight:700;
     --panel-text-color:#000000;
     --panel-text-size:14px;
+    --panel-text-weight:400;
   }
 
   .hero{
@@ -164,14 +170,17 @@
   }
   .section-head h2{
     font-family:"Inter","Noto Sans TC",sans-serif;
-    font-weight:700;
+    font-weight:var(--panel-title-weight, 700);
     font-size:var(--panel-title-size, 18px);
     color:var(--panel-title-color, var(--ink));
+    text-align:center;
   }
   .section-head p{
+    font-weight:var(--panel-text-weight, 400);
     font-size:var(--panel-text-size, 14px);
     color:var(--panel-text-color, var(--ink-soft));
     max-width:360px; line-height:1.7; margin:0 auto;
+    text-align:center;
   }
 
   .section-head-row{
@@ -180,7 +189,7 @@
   }
   .section-head-row h2{
     font-family:"Inter","Noto Sans TC",sans-serif;
-    font-weight:700;
+    font-weight:var(--panel-title-weight, 700);
     font-size:var(--panel-title-size, 18px);
     color:var(--panel-title-color, var(--ink));
   }
@@ -192,11 +201,13 @@
 
   .about-block p{
     font-family:"Inter","Noto Sans TC",sans-serif;
+    font-weight:var(--panel-text-weight, 400);
     font-size:var(--panel-text-size, 16px);
     color:var(--panel-text-color, var(--ink-soft));
     max-width:480px;
     margin:0 auto;
     line-height:1.8;
+    text-align:center;
   }
 
   .carousel{
@@ -232,13 +243,18 @@
   .tile:hover .tile-image .img-a{ opacity:0; }
   .tile:hover .tile-image .img-b{ opacity:1; }
 
+  .tile{
+    text-align:center;
+  }
   .tile h3{
     font-family:"Inter","Noto Sans TC",sans-serif;
-    font-size:13px; font-weight:500;
+    font-size:13px;
+    font-weight:var(--panel-title-weight, 500);
     color:var(--panel-title-color, var(--ink));
   }
   .tile p{
     font-size:var(--panel-text-size, 12px);
+    font-weight:var(--panel-text-weight, 400);
     color:var(--panel-text-color, var(--ink-soft));
     line-height:1.5;
   }
@@ -255,6 +271,7 @@
     padding:0;
   }
   .car-arrow:hover{ opacity:0.5; }
+  .car-arrow:disabled{ opacity:0.25; cursor:default; pointer-events:none; }
 
   @media (max-width:860px){
     .carousel-track .tile{ flex:0 0 100%; padding:0 34px; }
@@ -282,22 +299,22 @@
 
   .drawer-overlay{
     position:fixed; inset:0; background:transparent;
-    opacity:0; visibility:hidden; transition:opacity .3s, background .3s; z-index:60;
+    opacity:0; visibility:hidden; transition:opacity .3s; z-index:40;
   }
   .drawer-overlay.open{opacity:1; visibility:visible;}
-  .drawer-overlay.overlay--light{ background:rgba(0,0,0,0); }
   .drawer{
-    position:fixed; top:0; left:0; width:100%;
-    height:auto; max-height:85vh;
+    position:fixed; left:0; width:100%;
+    top:var(--header-h);   /* 由JS依實際頁首高度動態覆寫,這裡是備用值 */
+    height:auto; max-height:calc(85vh - var(--header-h));
     background:transparent; color:#ffffff;
-    z-index:61;
-    transform:translateY(-100%);
-    transition:transform .35s ease, background .3s ease, color .3s ease;
-    padding:40px var(--header-pad-y) var(--header-pad-x);
+    z-index:45;   /* 低於頁首(70),頁首Logo與圖示永遠在最上層不被蓋住 */
+    opacity:0; visibility:hidden; transform:translateY(-12px);
+    transition:opacity .3s ease, transform .3s ease, background .3s ease, color .3s ease;
+    padding:24px var(--header-pad-x) 40px;
     overflow-y:auto;
     display:flex; flex-direction:column;
   }
-  .drawer.open{transform:translateY(0);}
+  .drawer.open{ opacity:1; visibility:visible; transform:translateY(0); }
   .drawer.drawer--light{
     background:#ffffff; color:#000000;
   }
@@ -331,7 +348,7 @@
 <body>
 
 <header id="siteHeader">
-  <a href="/" class="brand">
+  <a href="#top" class="brand" id="logoLink">
     <img src="logo black.png" alt="on in is an as" style="height:8px; width:auto; display:block;">
   </a>
 
@@ -487,30 +504,38 @@
   const menuToggle = document.getElementById('menuToggle');
   const drawer = document.getElementById('drawer');
   const overlay = document.getElementById('drawerOverlay');
+  const logoLink = document.getElementById('logoLink');
   let drawerOpen = false;
 
-  function toggleDrawer(){
-    drawerOpen = !drawerOpen;
-    if (drawerOpen) {
-      if (header.classList.contains('header--light')) {
-        drawer.classList.add('drawer--light');
-        overlay.classList.add('overlay--light');
-      } else {
-        drawer.classList.remove('drawer--light');
-        overlay.classList.remove('overlay--light');
-      }
-      drawer.classList.add('open');
-      overlay.classList.add('open');
-      menuToggle.textContent = '×';
+  function positionDrawer(){
+    drawer.style.top = header.offsetHeight + 'px';
+  }
+  positionDrawer();
+  window.addEventListener('resize', positionDrawer);
+
+  function openDrawer(){
+    drawerOpen = true;
+    if (header.classList.contains('header--light')) {
+      drawer.classList.add('drawer--light');
     } else {
-      drawer.classList.remove('open');
-      overlay.classList.remove('open');
-      menuToggle.textContent = '☰';
+      drawer.classList.remove('drawer--light');
     }
+    positionDrawer();
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    menuToggle.textContent = '×';
+  }
+  function closeDrawer(){
+    drawerOpen = false;
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    menuToggle.textContent = '☰';
+  }
+  function toggleDrawer(){
+    if (drawerOpen) closeDrawer(); else openDrawer();
   }
   menuToggle.addEventListener('click', toggleDrawer);
-  overlay.addEventListener('click', toggleDrawer);
-  document.querySelectorAll('.drawer-group a').forEach(a => a.addEventListener('click', toggleDrawer));
+  overlay.addEventListener('click', closeDrawer);
 
   document.querySelectorAll('[data-header]').forEach(sec => {
     const obs = new IntersectionObserver((entries) => {
@@ -553,6 +578,28 @@
     setTimeout(() => { isAnimating = false; }, 850);
   }
 
+  /* 手機選單連結:直接指定跳轉目標面板,不依賴瀏覽器原生錨點跳轉(避免與滿版捲動衝突而跳不準) */
+  document.querySelectorAll('.drawer-group a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = a.getAttribute('href').slice(1);
+      const idx = panels.findIndex(p => p && p.id === targetId);
+      closeDrawer();
+      if (idx !== -1) {
+        setTimeout(() => goToPanel(idx), 60);
+      }
+    });
+  });
+
+  /* 點擊Logo:確實回到首圖(index 0),不會停留在原本捲動位置 */
+  if (logoLink) {
+    logoLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeDrawer();
+      goToPanel(0);
+    });
+  }
+
   window.addEventListener('wheel', (e) => {
     if (isAnimating) { e.preventDefault(); return; }
     e.preventDefault();
@@ -586,21 +633,28 @@
     function maxIndex(){
       return Math.max(0, total - visibleCount());
     }
+    const prevBtn = container.querySelector('.car-prev');
+    const nextBtn = container.querySelector('.car-next');
+
     function update(){
       const itemWidth = 100 / visibleCount();
       track.style.transform = `translateX(-${index * itemWidth}%)`;
+      prevBtn.disabled = index <= 0;
+      nextBtn.disabled = index >= maxIndex();
     }
     function next(){
-      index = index >= maxIndex() ? 0 : index + 1;
+      if (index >= maxIndex()) return;   // 已在最後,不循環
+      index += 1;
       update();
     }
     function prev(){
-      index = index <= 0 ? maxIndex() : index - 1;
+      if (index <= 0) return;   // 已在開頭,不循環
+      index -= 1;
       update();
     }
 
-    container.querySelector('.car-next').addEventListener('click', next);
-    container.querySelector('.car-prev').addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
     window.addEventListener('resize', () => {
       index = Math.min(index, maxIndex());
       update();
@@ -625,6 +679,8 @@
   }
 
   document.querySelectorAll('[data-carousel]').forEach(initCarousel);
+
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
 </script>
 
 </body>
