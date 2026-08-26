@@ -243,6 +243,8 @@
   .tile-image .img-b{ opacity:0; }
   .tile:hover .tile-image .img-a{ opacity:0; }
   .tile:hover .tile-image .img-b{ opacity:1; }
+  .tile.no-swap:hover .tile-image .img-a{ opacity:1; }
+  .tile.no-swap:hover .tile-image .img-b{ opacity:0; }
 
   .tile{
     text-align:center;
@@ -430,7 +432,7 @@
           <h3>Somefour</h3>
           <p>I am a dog.</p>
         </div>
-        <div class="tile">
+        <div class="tile no-swap">
           <div class="tile-image">
             <img class="img-a" src="Pimsocko-cc.gif" alt="Pimsocko">
           </div>
