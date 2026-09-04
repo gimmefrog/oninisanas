@@ -659,6 +659,10 @@
     goToPanel(current + (e.deltaY > 0 ? 1 : -1));
   }, { passive:false });
 
+  document.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+}, { passive: false });
+
   let pageTouchStartY = 0;
   document.addEventListener('touchstart', (e) => {
     pageTouchStartY = e.touches[0].clientY;
